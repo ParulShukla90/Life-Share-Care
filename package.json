@@ -1,0 +1,16 @@
+{
+  "name": "lifesharecare",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "author": "Parul Shukla",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "morgan": "^1.7.0"
+  }
+}
