@@ -7,14 +7,23 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       type: DataTypes.INTEGER
     },    
-    type_id: DataTypes.INTEGER,
+    typeId:{
+      type: DataTypes.INTEGER,
+      field: 'type_id'
+    },
+    pswdId :{
+      type: DataTypes.INTEGER,      
+      field: 'pswd_id'
+
+    },
     email_id:{
         allowNull: false,
         type: DataTypes.STRING
     },
     first_name: DataTypes.STRING,
     last_name: DataTypes.STRING,
-    is_active: DataTypes.BOOLEAN,
+    is_active: DataTypes.BOOLEAN  
+
   }, {
     classMethods: {
       associate: function(models) {
@@ -22,9 +31,12 @@ module.exports = function(sequelize, DataTypes) {
       users.belongsTo(models.user_types, {
           as: "type"
         });
+
+      users.hasOne  (models.users_password , {foreignKey: 'user_id'});
+     
       }
-    }
-  })
+    },timestamps: false
+  } )
 
   ;
   return users;
