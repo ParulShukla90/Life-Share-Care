@@ -12,15 +12,20 @@
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.3.0",
     "body-parser": "^1.15.2",
+    "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "ejs": "^2.4.2",
     "express-session": "^1.14.0",
+    "express-sessions": "^1.0.5",
+    "moment": "^2.14.1",
     "morgan": "^1.7.0",
+    "nodemailer": "^2.5.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^6.0.2",
     "sequelize": "^2.0.0-rc1",
-    "sequelize-cli": "^2.4.0"
+    "sequelize-cli": "^2.4.0",
+    "uuid-js": "^0.7.5"
   },
   "devDependencies": {
     "gulp": "^3.8.7",

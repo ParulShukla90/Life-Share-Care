@@ -1,48 +1,78 @@
-<div class="content-wrapper" style="min-height: 276px;">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Fixed Layout
-        <small>Blank example to the fixed layout</small>
+<div style="min-height: 276px;" class="content-wrapper ng-scope" ng-init="getAllInvites()">
+	<section class="content-header">
+		<h1>Agencies Invitations<small>list of all agencies invited to register with Life Share Care</small>
       </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li><a href="#">Layout</a></li>
-        <li class="active">Fixed</li>
-      </ol>
-    </section>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="callout callout-info">
-        <h4>Tip!</h4>
+			<li class="active">Agencies</li>
+		</ol>
+	</section>
+	<section class="content clearfix">
+		<div class="box">
+			<div class="content clearfix">
+                <div class="col-md-12">
+                    <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#agencyModal">Add a new Agency</button>
+                </div>
+                <div class="col-md-12">
+                    <div role="alert" class="alert alert-success alert-dismissible fade in" ng-if="pageMsg">
+                        <button aria-label="Close" data-dismiss="alert" class="close" type="button">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                           <p>{{pageMsg}}</p>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <table ng-table="tableParams" class="table table-hover col-md-8" >
+                        <tr ng-repeat="agncy in $data">
+                            <td title="'#'" >
+                                {{$index+1}}
+                            </td>    
+                            <td title="'Email'" sortable="'email'">
+                                {{agncy.email}}
+                            </td>
+                            <td title="'Expires on'"  >
+                                {{agncy.expired_on | date:medium}}
+                                <!--<span ng-if="agncy.createdAt >date">
+                                    Active
+                                </span>
+                                <span ng-if="agncy.createdAt <=date">
+                                    Expired
+                                </span>-->
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+		</div>
+	</section>
+</div>
 
-        <p>Add the fixed class to the body tag to get this layout. The fixed layout is your best option if your sidebar
-          is bigger than your content because it prevents extra unwanted scrolling.</p>
-      </div>
-      <!-- Default box -->
-      <div class="box">
-        <div class="box-header with-border">
-          <h3 class="box-title">Title</h3>
-
-          <div class="box-tools pull-right">
-            <button title="Collapse" data-toggle="tooltip" data-widget="collapse" class="btn btn-box-tool" type="button">
-              <i class="fa fa-minus"></i></button>
-            <button title="Remove" data-toggle="tooltip" data-widget="remove" class="btn btn-box-tool" type="button">
-              <i class="fa fa-times"></i></button>
-          </div>
-        </div>
-        <div class="box-body">
-          Start creating your amazing application!
-        </div>
-        <!-- /.box-body -->
-        <div class="box-footer">
-          Footer
-        </div>
-        <!-- /.box-footer-->
-      </div>
-      <!-- /.box -->
-
-    </section>
-    <!-- /.content -->
-  </div>
+<div class="modal fade" id="agencyModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Add a new agency</h4>
+			</div>
+			<form name="addAgency" novalidate >
+                <div class="modal-body">
+                    <div role="alert" class="alert alert-danger alert-dismissible fade in" ng-if="addMsg">
+                        <button aria-label="Close" data-dismiss="alert" class="close" type="button">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                           <p>{{addMsg}}</p>
+                    </div>
+                        <div class="form-group col-md-12">
+                            <label class="form-controll col-md-4"> Email </label>
+                            <input type="email" name="email" class="form-controll col-md-8" ng-model="agency.email_id" >
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="saveAgency()" ng-disabled="addAgency.$invalid">Save changes</button>
+                </div>
+            </form>
+		</div>
+	</div>
+</div>
