@@ -22,7 +22,7 @@ var addInvite = function(req,res){
             expired_on : new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
             //expired_on : new Date()
         }
-        mailer.sendMail(req.body.email_id,'https://52.39.212.226:5666/'+data.token,function(error){
+        mailer.sendMail(req.body.email_id,'https://203.100.79.82:8000/invite/'+data.token,function(error){
             if(error){
                 outputJson = {
                     msg       : "There was some error! Email was not sent.",
@@ -98,14 +98,14 @@ var inviteProcess = function(req, res, next) {
     }).then(function(data) {
         if (!data) {
             // TODO - SEND FLASH MESSAGE FROM HERE 
-            req.flash('message', 'Invalid Token');
+            req.flash('error', 'Invalid Token');
             return res.redirect("/login");
         }
         // TODO - Check expiration data from here . 
         var now = new moment();
         tokenDate = moment(data.dataValues.expired_on);
         if (tokenDate.diff(now) < 0) {
-            req.flash('message', 'Your invitation is being expired ');
+            req.flash('error', 'Your invitation is being expired ');
             res.redirect("/login");
         }
         data.dataValues.inviteId = inviteId ; 
@@ -113,7 +113,7 @@ var inviteProcess = function(req, res, next) {
 
     }).catch(function(error) {
         // :: TODO - Send flash message from here 
-        req.flash('message', error );
+        req.flash('error', error );
         res.redirect("/login");
     });
 
@@ -179,9 +179,12 @@ var registration = function(req, res, next) {
                     agencyObj.pswdId = passwordObj.dataValues.id;
                     models.users.build(agencyObj)
                         .save().then(function(data) {
-                                var salt = bcrypt.genSaltSync(10);
+                                var salt = bcrypt.genSaltSync(data.dataValues.id%10);
                                 var hash = bcrypt.hashSync(req.body.password, salt );
+
                                     passwordObj.user_password = hash;
+                                    passwordObj.user_id = data.dataValues.id ;
+
                                     passwordObj.save().then(function() { "passwordObj Updated"});
                                     res.json({
                                         data: data

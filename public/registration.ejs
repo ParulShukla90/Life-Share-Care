@@ -56,29 +56,29 @@
       <div class="form-group has-feedback">
         <input type="text" name="first_name" ng-model="user.first_name" class="form-control" placeholder="First Name" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-        <span class="help-block" ng-if="register.first_name.$invalid">Please enter First Name.</span>
+        <span class="help-block" ng-if="register.first_name.$invalid && register.first_name.$touched">Please enter First Name.</span>
       </div>
       <div class="form-group has-feedback">
         <input type="text" name="last_name" ng-model="user.last_name" class="form-control" placeholder="Last Name" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-        <span class="help-block">Please enter Last Name.</span>
+        <span class="help-block" ng-if="register.last_name.$invalid && register.last_name.$touched">Please enter Last Name.</span>
       </div>
 
       <div class="form-group has-feedback">
         <input type="password" name="password" ng-model="user.password" class="form-control" placeholder="Password" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-        <span class="help-block">Please enter Password.</span>
+        <span class="help-block" ng-if="register.password.$invalid && register.password.$touched">Please enter Password.</span>
       </div>
 
       <div class="form-group has-feedback">
         <input type="password" name="confirmpassword" ng-model="user.confirmpassword" class="form-control" placeholder="Confirm Password" required>
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-        <span class="help-block" >Please enter Confirm Password.</span>
+        <span class="help-block" ng-if="register.confirmpassword.$invalid && (user.confirmpassword !== user.password || register.confirmpassword.$touched)" >Please enter Confirm Password.</span>
       </div>
      
       <div class="row">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-primary btn-block btn-flat" ng-click="registerAgency('<%= data.email %>','<%= data.inviteId %>')" ng-disabled="register.$invalid">Confirm</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat" ng-click="registerAgency('<%= data.email %>','<%= data.inviteId %>')" ng-disabled="register.$invalid || user.confirmpassword !== user.password">Confirm</button>
         </div>
       </div>
     </form>

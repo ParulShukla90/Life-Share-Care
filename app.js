@@ -12,6 +12,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('bcryptjs');
 var flash=require("connect-flash");
 var models = require("./app/models");
+// Grab sessions
 
 var app = express();
 
@@ -37,7 +38,7 @@ passport.use('local-login', new LocalStrategy({
 
         if (!user) {
           return done(null, false, {
-            'message': 'User Not found.'
+            'message': 'Invalid credentials.'
           });
         }
 
@@ -50,7 +51,7 @@ passport.use('local-login', new LocalStrategy({
         // User exists but wrong password, log the error 
         if (!isValidPassword(user.dataValues.users_password.dataValues.user_password, password)) {
           return done(null, false, {
-            'message': 'Invalid Password'
+            'message': 'Invalid credentials'
           }); // redirect back to login page
         }
         // User and password both match, return user from done method
@@ -93,8 +94,12 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
-app.use(flash());
 
+// app.use(function(req, res, next) {
+//   res.locals.messages = req.flash();
+//   console.log(res.locals.messages);
+//   next();
+// });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'public'));
@@ -116,6 +121,7 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use(flash());
 
 // routes
 require('./routes/index.js')(app, express, passport);
@@ -124,33 +130,33 @@ require('./routes/invite.js')(app, express, passport);
 
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
 // error handlers
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
+// if (app.get('env') === 'development') {
+//   app.use(function(err, req, res, next) {
+//     res.status(err.status || 500);
+//     res.render('error', {
+//       message: err.message,
+//       error: err
+//     });
+//   });
+// }
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
-});
+// app.use(function(err, req, res, next) {
+//   res.status(err.status || 500);
+//   res.render('error', {
+//     message: err.message,
+//     error: {}
+//   });
+// });
 module.exports = app;

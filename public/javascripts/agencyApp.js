@@ -1,19 +1,17 @@
 "use strict";
-angular.module('agency',[]);
-angular.module('adminMain',[]);
 angular.module('communicationModule', []);
-var lifeShareCare = angular.module('lifeShareCare', ['ui.router','agency','communicationModule','ngTable','adminMain'])
+var lifeShareCare = angular.module('lifeShareCare', ['ui.router','communicationModule'])
 	.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
-		var checkAdminLogin = function($q, $http){
+		var checkAgencyLogin = function($q, $http){
 			var deferred = $q.defer();
-			$http.get(baseUrl+'/auth/getAdminSession').then(function(response){
+			console.log(1);
+			$http.get(baseUrl+'/auth/getAgencySession').then(function(res){
 				setTimeout(function() {	deferred.resolve()},0);
 				return deferred.promise;
 			},function(response){
 				window.location.href = baseUrl +'/login';
 				setTimeout(function() {	deferred.reject()},0);
 			})
-			
 		}
 		
 		$urlRouterProvider.otherwise("/");
@@ -22,15 +20,14 @@ var lifeShareCare = angular.module('lifeShareCare', ['ui.router','agency','commu
 				url: "/",
 				views: {
 					"": {
-						templateUrl: "/modules/superAdmin/agency/views/agency.html",
-						controller:  "agencyCtrl",
-						resolve : {checklogin :checkAdminLogin}
+						templateUrl: "/modules/agency/dashboard/views/dashboard.html",
+						resolve : {checklogin :checkAgencyLogin}
 					},
 					"header":{
-						templateUrl: "/modules/superAdmin/header/views/header.html",
+						templateUrl: "/modules/agency/header/views/header.html",
 					},
 					"sidebar":{
-						templateUrl: "/modules/superAdmin/sidebar/views/sidebar.html",
+						templateUrl: "/modules/agency/sidebar/views/sidebar.html",
 					}
 				}
 			});

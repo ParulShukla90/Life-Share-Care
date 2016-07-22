@@ -19,7 +19,7 @@ lifeShareCare.controller("agencyCtrl", ['$scope','$timeout','agencyService','NgT
                         },2000)
                     }
                 }else{
-                    $scope.pageMsg = "Invite has been sent to" + $scope.agency.email_id+". Please note that the registeration link will expire after 24 hours.";
+                    $scope.pageMsg = "Invite has been sent to " + $scope.agency.email_id+". Please note that the registeration link will expire after 24 hours.";
                     $scope.agency = {};
                     $('#agencyModal').modal('hide')
                     $timeout(function(){
@@ -46,10 +46,10 @@ lifeShareCare.controller("agencyCtrl", ['$scope','$timeout','agencyService','NgT
                 if(err.status ==401){
                     $window.location.href = baseUrl+"/login";
                 }else{
-                    $scope.pageMsg = "Error while loading data!!";
-                    $timeout(function(){
-                        $scope.pageMsg = "";    
-                    },5000)
+                    //$scope.pageMsg = "Error while loading data!!";
+                    //$timeout(function(){
+                    //    $scope.pageMsg = "";    
+                    //},5000)
                 }
             }else{
                 $scope.agencies = response.data.data;

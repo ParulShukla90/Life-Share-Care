@@ -1,4 +1,4 @@
-var baseUrl = "https://172.24.9.210:8000";
+var baseUrl = "https://203.100.79.82:8000";
 var webservices = {
 	"inviteAgency": baseUrl + "/invite/add",
 	"getAllInvites": baseUrl + "/invite/getAll",

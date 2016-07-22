@@ -24,6 +24,23 @@ var AuthController = {
 				error: "Not Authenticated "
 			})
 		}
+	},
+	getAgencySession : function(req,res){
+		if (req.isAuthenticated()){
+			if (req.user && req.user.typeId == 3){
+				res.status(200).json({
+					msg: "Authenticated "
+				})
+			}else{
+				res.status(401).json({
+					error: "Not Authenticated "
+				})
+			}
+		}else{
+			res.status(401).json({
+				error: "Not Authenticated "
+			})
+		}
 	}
 
 }

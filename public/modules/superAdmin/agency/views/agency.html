@@ -12,7 +12,7 @@
 		<div class="box">
 			<div class="content clearfix">
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#agencyModal">Add a new Agency</button>
+                    <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#agencyModal">Invite a new Agency</button>
                 </div>
                 <div class="col-md-12">
                     <div role="alert" class="alert alert-success alert-dismissible fade in" ng-if="pageMsg">
@@ -22,7 +22,14 @@
                            <p>{{pageMsg}}</p>
                     </div>
                 </div>
-                <div class="col-md-12">
+				<div ng-show="!agencies || agencies.length <1">
+					<br><br><br><br><br>
+					<div class="callout callout-info lead">
+						<h4>Sorry! No records found.</h4>
+						<p>Start sending invites and they will be listed here.</p>
+					</div>
+				</div>
+                <div class="col-md-12" ng-if="agencies && agencies.length >0">
                     <table ng-table="tableParams" class="table table-hover col-md-8" >
                         <tr ng-repeat="agncy in $data">
                             <td title="'#'" >
@@ -53,7 +60,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Add a new agency</h4>
+				<h4 class="modal-title" id="myModalLabel">Invite a new agency</h4>
 			</div>
 			<form name="addAgency" novalidate >
                 <div class="modal-body">

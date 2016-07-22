@@ -4,6 +4,7 @@ module.exports = function(app, express, passport) {
 	var router = express.Router();
 	router.post('/login',	passport.authenticate('local-login', {failureRedirect: '/login' ,  failureFlash : true	}),	loginObj.authenticate);
 	router.get('/getAdminSession',	loginObj.getAdminSession);
+	router.get('/getAgencySession',	loginObj.getAgencySession); 
 	app.use('/auth', router);
 
 };
