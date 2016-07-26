@@ -5,6 +5,7 @@ module.exports = function(app, express, passport) {
 	router.post('/login',	passport.authenticate('local-login', {failureRedirect: '/login' ,  failureFlash : true	}),	loginObj.authenticate);
 	router.get('/getAdminSession',	loginObj.getAdminSession);
 	router.get('/getAgencySession',	loginObj.getAgencySession); 
+	router.get('/directories',	loginObj.directories); 
 	app.use('/auth', router);
 
 };

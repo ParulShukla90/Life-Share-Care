@@ -20,6 +20,12 @@ module.exports = function(sequelize, DataTypes) {
         allowNull: false,
         type: DataTypes.STRING
     },
+    user_name:{
+        type: DataTypes.STRING
+    },
+    phone_number:{
+        type: DataTypes.STRING
+    },
     first_name: DataTypes.STRING,
     last_name: DataTypes.STRING,
     is_active: DataTypes.BOOLEAN  

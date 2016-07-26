@@ -1,7 +1,19 @@
 "use strict";
 angular.module('communicationModule', []);
-var lifeShareCare = angular.module('lifeShareCare', ['ui.router','communicationModule'])
+var lifeShareCare = angular.module('lifeShareCare', ['ui.router','communicationModule','ui.bootstrap'])
 	.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+		getHash()
+		function getHash(){
+			$.ajax({url :baseUrl+'/auth/directories',type: 'get', async: false,
+				success : function(res){
+					for(var i = 0; i < res.length; i++){
+						hash.insert( res[i].title, res[i].path );
+					}
+				},error: function(err){
+					window.location.href = baseUrl +'/login';
+				}
+			})
+		}
 		var checkAgencyLogin = function($q, $http){
 			var deferred = $q.defer();
 			console.log(1);
@@ -20,14 +32,14 @@ var lifeShareCare = angular.module('lifeShareCare', ['ui.router','communicationM
 				url: "/",
 				views: {
 					"": {
-						templateUrl: "/modules/agency/dashboard/views/dashboard.html",
+						templateUrl: hash.retrieve('agency_dashboard'),
 						resolve : {checklogin :checkAgencyLogin}
 					},
 					"header":{
-						templateUrl: "/modules/agency/header/views/header.html",
+						templateUrl: hash.retrieve('agency_header'),
 					},
 					"sidebar":{
-						templateUrl: "/modules/agency/sidebar/views/sidebar.html",
+						templateUrl: hash.retrieve('agency_sidebar'),
 					}
 				}
 			});

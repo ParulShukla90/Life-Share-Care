@@ -1,31 +1,24 @@
 'use strict';
 module.exports = function(sequelize, DataTypes) {
-  var invite = sequelize.define('invite', {
+  var directoryData = sequelize.define('directory', {
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
       type: DataTypes.INTEGER
     },       
-    email:{
+    user_id: {
+        allowNull: false,
+        type: DataTypes.INTEGER
+    },
+    title:{
         allowNull: false,
         type: DataTypes.STRING
-    },      
-    name:{ 
-        allowNull: true,
-        type: DataTypes.STRING
-    },    
-    token:{
+    },
+    path: {
         allowNull: false,
         type: DataTypes.STRING
-    },  
-    status:{
-        type: DataTypes.BOOLEAN
-    }, 
-    expired_on:{
-        allowNull: false,
-        type: DataTypes.DATE
-    }           
+    }
   }, {
     classMethods: {
       associate: function(models) {
@@ -33,5 +26,5 @@ module.exports = function(sequelize, DataTypes) {
       }
     }
   });
-  return invite;
+  return directoryData;
 };

@@ -13,22 +13,25 @@ var bcrypt = require('bcryptjs');
 _________________________________________________________________________
 */
 var addInvite = function(req,res){
-    if(req.body.email_id){
-        
-        console.log(req.body);
+    if(req.body.email_id && req.body.first_name){
         var data = {
             email: req.body.email_id,
+            name: req.body.first_name,
             token : UUID.create().toString(),
-            expired_on : new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
-            //expired_on : new Date()
+            expired_on : new Date(new Date().getTime() + 24 * 60 * 60 * 1000),
+            status : true
         }
-        mailer.sendMail(req.body.email_id,'https://203.100.79.82:8000/invite/'+data.token,function(error){
+        //console.log(data.expired_on)
+        var link = 'https://203.100.79.82:8000/invite/'+data.token;
+        var html = "Hello, <br/><br/> This is an informatory mail. Life Share care admin has invited you to join lifesharecare.com as an agency. Please visit the following link to register with us :<br/><br/><a href='"+link+"'>" +link+ "</a><br/><br/><small>*Please note that the link will expire in 24 hours.</small><br/><br/>  Thank you,<br/> Life Share Care Team";
+        var subject = "Invitation to register as agency at lifesharecare.com";
+        mailer.sendMail( req.body.email_id, html, subject, function(error){
             if(error){
                 outputJson = {
                     msg       : "There was some error! Email was not sent.",
                     error: error
                 }
-        res.status(400).json(outputJson);
+                res.status(400).json(outputJson);
             }else{
                 console.log(data);
                 var agency = models.invite.build(data)
@@ -38,7 +41,7 @@ var addInvite = function(req,res){
                      outputJson = {
                         msg       : error
                     }
-                    res.status(401).json(outputJson);
+                    res.status(400).json(outputJson);
                 });
             }
         });   
@@ -61,7 +64,7 @@ exports.addInvite = addInvite;
 _________________________________________________________________________
 */
 var getAllInvites = function(req,res){
-    models.invite.findAll().then(function(data){
+    models.invite.findAll({ order: '"createdAt" DESC' }).then(function(data){
         if(!data){
             data =[]    
         }
@@ -93,7 +96,8 @@ var inviteProcess = function(req, res, next) {
 
     models.invite.findOne({
         where: {
-            token: inviteId
+            token: inviteId,
+            status : true
         }
     }).then(function(data) {
         if (!data) {
@@ -105,19 +109,16 @@ var inviteProcess = function(req, res, next) {
         var now = new moment();
         tokenDate = moment(data.dataValues.expired_on);
         if (tokenDate.diff(now) < 0) {
-            req.flash('error', 'Your invitation is being expired ');
+            req.flash('error', 'Your invitation has expired ');
             res.redirect("/login");
         }
         data.dataValues.inviteId = inviteId ; 
         res.render("registration.ejs",{"data" : data.dataValues }) ; 
-
     }).catch(function(error) {
         // :: TODO - Send flash message from here 
         req.flash('error', error );
         res.redirect("/login");
     });
-
-
 }
 exports.inviteProcess = inviteProcess;
 
@@ -134,26 +135,26 @@ _________________________________________________________________________
 var registration = function(req, res, next) {
 
     var inviteId = req.body.inviteId;
-    if (!inviteId || !req.body.password || !req.body.first_name || !req.body.last_name || !req.body.email) return res.status(400).json({
+    if (!inviteId || !req.body.password || !req.body.first_name || !req.body.username || !req.body.email) return res.status(400).json({
         msg: "Please provide valid information"
     });
     models.invite.findOne({
         where: {
             token: inviteId
         }
-    }).then(function(data) {
-        if (!data) {
+    }).then(function(invitationObj) {
+        if (!invitationObj) {
             res.status(400).json({
                 msg: "Invalid token"
             });
         }
-
+        
         var now = new moment();
-        tokenDate = moment(data.dataValues.expired_on);
+        tokenDate = moment(invitationObj.dataValues.expired_on);
         console.log("tokenDate", tokenDate.diff(now));
         if (tokenDate.diff(now) < 0) {
             res.status(400).json({
-                msg: "Your invitation is being expired"
+                msg: "Your invitation has expired"
             });
         }
         //check here if user is already registered 
@@ -165,48 +166,67 @@ var registration = function(req, res, next) {
             if (data) return res.status(400).json({
                 msg: "Already register"
             });
-            // SaveInfo 
-            var agencyObj = {
-                typeId: 3,
-                email_id: req.body.email,
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-            }
-            models.users_password.build({
-                    "user_password": req.body.password
-                }).save()
-                .then(function(passwordObj) {
-                    agencyObj.pswdId = passwordObj.dataValues.id;
-                    models.users.build(agencyObj)
-                        .save().then(function(data) {
-                                var salt = bcrypt.genSaltSync(data.dataValues.id%10);
-                                var hash = bcrypt.hashSync(req.body.password, salt );
-
-                                    passwordObj.user_password = hash;
-                                    passwordObj.user_id = data.dataValues.id ;
-
-                                    passwordObj.save().then(function() { "passwordObj Updated"});
-                                    res.json({
-                                        data: data
-                                    });
-                        }).catch(function(error) {
-                            outputJson = {
-                                msg: error
-                            }
-                            res.status(401).json(outputJson);
-                        });
-                })
-                .catch(function(error) {
-                    outputJson = {
-                        msg: error
-                    }
-                    res.status(401).json(outputJson);
-                })
+            models.users.findOne({
+                where: {
+                    user_name: req.body.username
+                }
+            }).then(function(data) {
+                if (data) return res.status(400).json({
+                    msg: "Username already exists! Please try with some other username."
+                });
+                
+                // SaveInfo 
+                var agencyObj = {
+                    typeId: 3,
+                    email_id: req.body.email,
+                    first_name: req.body.first_name,
+                    user_name: req.body.username,
+                    phone_number: req.body.phno
+                }
+                models.users_password.build({
+                        "user_password": req.body.password
+                    }).save()
+                    .then(function(passwordObj) {
+                        agencyObj.pswdId = passwordObj.dataValues.id;
+                        models.users.build(agencyObj)
+                            .save().then(function(data) {
+                                    console.log('\n\n6\n\n');
+                                    var salt = bcrypt.genSaltSync(data.dataValues.id%10);
+                                    var hash = bcrypt.hashSync(req.body.password, salt );
+                                        passwordObj.user_password = hash;
+                                        passwordObj.user_id = data.dataValues.id ;
+                                        passwordObj.save().then(function() { "passwordObj Updated"});
+                                        invitationObj.status = false;
+                                        invitationObj.save();
+                                        res.json({
+                                            data: data
+                                        });
+                            }).catch(function(error) {
+                                outputJson = {
+                                    msg: error
+                                }
+                                res.status(401).json(outputJson);
+                            });
+                    })
+                    .catch(function(error) {
+                        outputJson = {
+                            msg: error
+                        }
+                        res.status(401).json(outputJson);
+                    })
+            }).catch(function(error1) {
+                outputJson = {
+                    msg: error1
+                }
+                res.status(401).json(outputJson);
+            });
         });
 
     }).catch(function(error) {
-        req.flash('message', error);
-        res.redirect("/login");
+        outputJson = {
+            msg: error
+        }
+        res.status(401).json(outputJson);
     });
 
 

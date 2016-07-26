@@ -15,13 +15,10 @@ var models = require("./app/models");
 // Grab sessions
 
 var app = express();
-
-
 passport.use('local-login', new LocalStrategy({
     passReqToCallback: true
   },
   function(req, username, password, done) {
-
     process.nextTick(function() {
       // check in SEQUILIZE if a user with username exists or not
       models.users.findOne({
@@ -47,7 +44,6 @@ passport.use('local-login', new LocalStrategy({
             'message': 'User Password Not found.'
           });
         }
-
         // User exists but wrong password, log the error 
         if (!isValidPassword(user.dataValues.users_password.dataValues.user_password, password)) {
           return done(null, false, {
@@ -59,10 +55,7 @@ passport.use('local-login', new LocalStrategy({
         // req.session = user.id ; 
         return done(null, user);
       });
-
     });
-
-
   }));
   var isValidPassword = function(userPassword, password) {
     return bcrypt.compareSync(password, userPassword);
@@ -93,7 +86,6 @@ passport.deserializeUser(function(id, done) {
     done(null , user ? user.dataValues  : null );
   });
 });
-
 
 // app.use(function(req, res, next) {
 //   res.locals.messages = req.flash();

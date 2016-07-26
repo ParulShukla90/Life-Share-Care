@@ -1,8 +1,9 @@
 "use strict";
 angular.module("agency")
-lifeShareCare.controller("agencyCtrl", ['$scope','$timeout','agencyService','NgTableParams','$window', function($scope,$timeout,agencyService,NgTableParams,$window) {
+lifeShareCare.controller("agencyCtrl", ['$scope','$timeout','agencyService','NgTableParams','$window','$filter', function($scope,$timeout,agencyService,NgTableParams,$window,$filter) {
     $scope.agency = {};
     $scope.date = new Date();
+    $scope.showExpired = false;
     /*
      *function to add agency
     */
@@ -58,14 +59,27 @@ lifeShareCare.controller("agencyCtrl", ['$scope','$timeout','agencyService','NgT
         })
     }
     
+    $scope.viewFilter = function () {
+        $scope.tableParams.filter({'status' : !$scope.showExpired }, $scope.agencies);
+
+    };
     
+    
+    /*
+     *    initialize ng-table on recieved data to display
+    */
     $scope.initTable= function(){
         $scope.tableParams = new NgTableParams({
             count: 10
         }, {
             total: $scope.agencies.length,
-            counts: [],
-            data: $scope.agencies
+            getData: function ($defer, params) {
+                var filteredData = params.filter() ? $filter('filter')($scope.agencies, params.filter()) : $scope.agencies;
+                var orderedData = params.sorting() ? $filter('orderBy')(filteredData, params.orderBy()) : filteredData;
+                params.total(filteredData.length);
+                $defer.resolve(orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count()));
+            }
         });
+        $scope.viewFilter();
     }
 }]);

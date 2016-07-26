@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -7,14 +6,14 @@ var app = require('../app');
 var models = require("../app/models");
 var debug = require('debug')('lifesharecare:server');
 var https = require('https');
-var fs=require('fs');
-var path=require('path');
+var fs = require('fs');
+var path = require('path');
 var hskey = fs.readFileSync(path.join(__dirname+'/../config/ssl/hacksparrow-key.pem'));
 var hscert = fs.readFileSync(path.join(__dirname+'/../config/ssl/hacksparrow-cert.pem'));
 
 var options = {
-    key: hskey,
-    cert: hscert
+    key : hskey,
+    cert : hscert
 };
 
 /**
