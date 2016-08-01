@@ -1,0 +1,46 @@
+<div style="min-height: 276px;" class="content-wrapper ng-scope">
+	<section class="content-header">
+		<h1>Patient
+      </h1>
+		<ol class="breadcrumb">
+			<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+			<li><a href="#"><i class="fa fa-dashboard"></i>Patient profile</a></li>
+		</ol>
+	</section>
+	<section class="content clearfix">
+		<div class="box">
+			<div class="content clearfix">
+				<uib-accordion close-others="true">
+					<div uib-accordion-group class="panel-info" heading="Static Header, initially expanded" is-open="true">
+						This content is straight in the template.
+					</div>
+					<div uib-accordion-group class="panel-info" heading="dynamic tab">
+						This content is straight in the template.This content is straight in the template.This content is straight in the template.This content is straight in the template.This content is straight in the template.This content is straight in the template.
+					</div>
+					<div uib-accordion-group class="panel-info" heading="Dynamic Body Content">
+						<p>The body of the uib-accordion group grows to fit the contents</p>
+					</div>
+					<div uib-accordion-group class="panel-info" heading="Custom template" template-url="group-template.html">
+						Hello
+					</div>
+					<div uib-accordion-group class="panel-info" heading="test">
+						<uib-accordion-heading>
+							Custom template with custom header template <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+						</uib-accordion-heading>
+						World
+					</div>
+					<div uib-accordion-group class="panel-danger" heading="Delete account">
+						<p>Please, to delete your account, click the button below</p>
+						<button class="btn btn-danger">Delete</button>
+					</div>
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							I can have markup, too! <i class="fa fa-meter" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+						</uib-accordion-heading>
+						This is just some content to illustrate fancy headings.
+					</div>
+				</uib-accordion>
+			</div>
+		</div>
+	</section>
+</div>

@@ -1,8 +1,14 @@
+/*
+ *This file contains code relaed to :
+ *layout rendering
+ *directory lookup
+ *get sessions
+*/
 var models = require("../models");
 var AuthController = {
 
 	authenticate: function(req, res, next) {
-		res.redirect("/")
+		res.redirect("/");
 	},
 
 	index: function(req, res, next){

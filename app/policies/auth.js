@@ -1,3 +1,7 @@
+/*
+ *This file contains all the express middlewares defined for access control.
+*/
+
 exports.isLoggedIn = function() {
 	return function(req, res, next) {
 		if (req.isAuthenticated()) return next();

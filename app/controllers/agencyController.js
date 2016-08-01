@@ -1,3 +1,8 @@
+/*
+ *This file contains code related to :
+ *agency registeration
+ *Invitation Process
+*/
 var models = require("../models");
 var UUID = require('uuid-js');
 var moment = require("moment");
@@ -9,7 +14,7 @@ var bcrypt = require('bcryptjs');
 * @Method :   		addInvite 
 * Created By: 		smartData Enterprises Ltd
 * Modified On:		-
-* @Purpose:   		To add a new store.
+* @Purpose:   		To add a new Agency.
 _________________________________________________________________________
 */
 var addInvite = function(req,res){

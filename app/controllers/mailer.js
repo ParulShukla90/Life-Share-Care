@@ -1,3 +1,7 @@
+/*
+ *This is common module which will be used to send mails
+*/
+
 var nodemailer = require('nodemailer');
 var smtpTransport = require('nodemailer-smtp-transport');
 var transporter = nodemailer.createTransport({

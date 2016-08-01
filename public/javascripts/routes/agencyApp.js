@@ -42,5 +42,21 @@ var lifeShareCare = angular.module('lifeShareCare', ['ui.router','communicationM
 						templateUrl: hash.retrieve('agency_sidebar'),
 					}
 				}
-			});
+			})
+			.state('patients', {
+				url: "/patients",
+				views: {
+					"": {
+						templateUrl: hash.retrieve('agency_patient'),
+						resolve : {checklogin :checkAgencyLogin}
+					},
+					"header":{
+						templateUrl: hash.retrieve('agency_header'),
+					},
+					"sidebar":{
+						templateUrl: hash.retrieve('agency_sidebar'),
+					}
+				}
+			})	
+			;
 	}]);
